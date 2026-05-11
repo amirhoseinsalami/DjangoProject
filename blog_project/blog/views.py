@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import CreateView, DetailView, UpdateView, DeleteView
 from .forms import CreatePostForm
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from .models import Category, Post
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 # Create your views here.
@@ -32,15 +32,18 @@ class SinglePostView(DetailView):
         return context
 
 
+
 class EditPostView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Post
     form_class = CreatePostForm
     template_name = 'blog/post_form.html'
-    success_url = reverse_lazy('blog:create')
 
     def test_func(self):
         return self.request.user == self.get_object().author
 
+    def get_success_url(self):
+        return reverse('blog:detail', kwargs={'pk': self.object.pk})
+    
 
 class DeletePostView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Post

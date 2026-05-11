@@ -1,0 +1,87 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+
+{% load widget_tweaks %}
+
+
+                    <h2 class="fw-bold mb-4 text-center">
+                        Create Post 
+                    </h2>
+
+                    <form method="POST" novalidate>
+                        {% csrf_token %}
+
+                        <!-- TITLE -->
+                        <div class="mb-4">
+                            {{ form.title.label_tag }}
+                            {{ form.title|add_class:"form-control"|add_error_class:"is-invalid" }}
+
+                            {% if form.title.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.title.errors|first }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- BODY -->
+                        <div class="mb-4">
+                            <label for="id_body" class="form-label">Body</label>
+                            <textarea
+                                name="body"
+                                id="id_body"
+                                rows="6"
+                                class="form-control {% if form.body.errors %}is-invalid{% endif %}"
+                            >{{ form.body.value|default_if_none:"" }}</textarea>
+
+                            {% if form.body.errors %}
+                                <div class="invalid-feedback">
+                                    {{ form.body.errors|first }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- CATEGORIES -->
+                        <div class="mb-4">
+                            {{ form.categories.label_tag }}
+                            {{ form.categories|add_class:"form-select"|add_error_class:"is-invalid" }}
+
+                            {% if form.categories.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.categories.errors|first }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- PUBLISHED AT -->
+                        <div class="mb-4">
+                            <label for="id_published_at" class="form-label">
+                                Published at
+                            </label>
+                            <input
+                                type="date"
+                                name="published_at"
+                                id="id_published_at"
+                                value="{{ form.published_at.value|default_if_none:'' }}"
+                                class="form-control {% if form.published_at.errors %}is-invalid{% endif %}"
+                            >
+
+                            {% if form.published_at.errors %}
+                                <div class="invalid-feedback">
+                                    {{ form.published_at.errors|first }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- SUBMIT -->
+                        <div class="d-grid mt-4">
+                            <button type="submit" class="btn btn-danger btn-lg rounded-3">
+                                🚀 Create Post
+                            </button>
+                        </div>
+
+                    </form>
+
+        
+
+{% endblock %}
