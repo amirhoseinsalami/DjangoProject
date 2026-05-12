@@ -12,9 +12,14 @@
     <title>Blog</title>
 </head>
 <body>
-<div class="container">
-        {% block content %}
-        {% endblock %}    
+
+    {% include "blog/layouts/header.html" %}
+
+    <div id="main">
+        <div class="container">
+            {% block content %}
+            {% endblock %}
+        </div>
     </div>
 
     

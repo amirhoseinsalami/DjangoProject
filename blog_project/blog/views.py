@@ -1,10 +1,27 @@
 from django.shortcuts import render
-from django.views.generic import CreateView, DetailView, UpdateView, DeleteView
+from django.views.generic import TemplateView, ListView, CreateView, DetailView, UpdateView, DeleteView
 from .forms import CreatePostForm
 from django.urls import reverse_lazy, reverse
 from .models import Category, Post
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 # Create your views here.
+
+class HomeView(TemplateView):
+    template_name = "blog/home.html"
+
+class IndexView(ListView):
+    model = Post
+    context_object_name = 'posts'
+    template_name = 'blog/index.html'
+    paginate_by = 4
+
+    def get_queryset(self):
+        return Post.objects.order_by('-created_at')
+
+    def get_context_data(self , **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Posts Page'
+        return context
 
 class CreatePostView(LoginRequiredMixin, CreateView):
     model = Post
@@ -48,7 +65,7 @@ class EditPostView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 class DeletePostView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Post
     template_name = 'blog/post_confirm_delete.html'
-    success_url = reverse_lazy('blog:create')
+    success_url = reverse_lazy('blog:posts')
 
     def test_func(self):#required by UserPassesTestMixin for authorization
         return self.request.user == self.get_object().author

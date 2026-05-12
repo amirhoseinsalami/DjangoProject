@@ -1,0 +1,19 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}
+    Posts Page
+{% endblock %}
+
+{% block content %}
+    <h2>{{ title }} : </h2>
+    <ul>
+        {% for post in posts %}
+            <li><a href="{% url 'blog:detail' post.id %}">{{ post.title }}</a></li>
+        {% empty %}
+            <li>No Post are available</li>
+        {% endfor %}    
+    </ul>
+  
+    {% include "blog/layouts/pagination.html" %}
+
+{% endblock %}

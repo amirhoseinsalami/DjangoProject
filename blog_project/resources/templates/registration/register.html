@@ -1,0 +1,110 @@
+{% extends "registration/base.html" %}
+
+{% block content %}
+<div class="container min-vh-100 d-flex align-items-center justify-content-center">
+  <div class="col-md-6 col-lg-5">
+
+    <div class="card shadow-lg border-0 rounded-4">
+      <div class="card-body p-5">
+
+        <!-- Title -->
+        <h3 class="text-center fw-bold mb-4">
+          Create an Account ✨
+        </h3>
+
+        <form method="post" action="{% url 'accounts:register' %}">
+          {% csrf_token %}
+
+          <!-- Username -->
+          <div class="mb-3">
+            {{ form.username.label_tag }}
+            <input type="text"
+                   name="username"
+                   id="id_username"
+                   maxlength="150"
+                   class="form-control form-control-lg"
+                   placeholder="Choose a username"
+                   required>
+
+            {% if form.username.help_text %}
+              <div class="form-text">
+                {{ form.username.help_text }}
+              </div>
+            {% endif %}
+
+            {% if form.username.errors %}
+              <div class="text-danger small">
+                {{ form.username.errors|first }}
+              </div>
+            {% endif %}
+          </div>
+
+          <!-- Password -->
+          <div class="mb-3">
+            {{ form.password1.label_tag }}
+            <input type="password"
+                   name="password1"
+                   id="id_password1"
+                   class="form-control form-control-lg"
+                   placeholder="Create a password"
+                   required>
+
+            {% if form.password1.help_text %}
+              <div class="form-text">
+                {{ form.password1.help_text }}
+              </div>
+            {% endif %}
+
+            {% if form.password1.errors %}
+              <div class="text-danger small">
+                {{ form.password1.errors|first }}
+              </div>
+            {% endif %}
+          </div>
+
+          <!-- Confirm Password -->
+          <div class="mb-4">
+            {{ form.password2.label_tag }}
+            <input type="password"
+                   name="password2"
+                   id="id_password2"
+                   class="form-control form-control-lg"
+                   placeholder="Confirm your password"
+                   required>
+
+            {% if form.password2.help_text %}
+              <div class="form-text">
+                {{ form.password2.help_text }}
+              </div>
+            {% endif %}
+
+            {% if form.password2.errors %}
+              <div class="text-danger small">
+                {{ form.password2.errors|first }}
+              </div>
+            {% endif %}
+          </div>
+
+          <!-- Submit -->
+          <div class="d-grid">
+            <button type="submit" class="btn btn-success btn-lg">
+              📝 Register
+            </button>
+          </div>
+
+        </form>
+
+        <!-- Login link -->
+        <p class="text-center mt-4 small text-muted">
+          Already have an account?
+          <a href="{% url 'accounts:login' %}" class="text-decoration-none">
+            Login here
+          </a>
+        </p>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

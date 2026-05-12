@@ -47,6 +47,16 @@
                         </div>
                     {% endif %}
 
+                    <!-- Delete Button (Author Only) -->
+                    {% if request.user == post.author %}
+                        <div class="mb-4">
+                            <a href="{% url 'blog:delete' post.pk %}"
+                               class="btn btn-danger px-4">
+                                🗑️ Delete
+                            </a>
+                        </div>
+                    {% endif %}
+
                     <!-- Divider -->
                     <hr class="my-4">
 
