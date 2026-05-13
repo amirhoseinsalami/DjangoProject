@@ -3,7 +3,7 @@ from django.views.generic import TemplateView, ListView, CreateView, DetailView,
 from .forms import CreatePostForm
 from django.urls import reverse_lazy, reverse
 from .models import Category, Post
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin, PermissionRequiredMixin
 # Create your views here.
 
 class HomeView(TemplateView):
@@ -27,7 +27,9 @@ class CreatePostView(LoginRequiredMixin, CreateView):
     model = Post
     form_class = CreatePostForm
     template_name = 'blog/post_form.html'
-    success_url = reverse_lazy('blog:create')
+
+    def get_success_url(self):
+        return reverse_lazy("blog:detail", kwargs={"pk": self.object.pk})
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -39,7 +41,7 @@ class CreatePostView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class SinglePostView(DetailView):
+class SinglePostView(LoginRequiredMixin, DetailView):
     model = Post
     template_name = 'blog/post_detail.html'
 
