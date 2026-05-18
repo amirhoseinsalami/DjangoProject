@@ -5,10 +5,8 @@ from django.contrib.auth.decorators import login_required,user_passes_test
 
 app_name = 'accounts'
 
-user_guest = user_passes_test(lambda u: not u.is_authenticated , '/' , None)
-
 urlpatterns = [
-    path('login/' , user_guest(auth_views.LoginView.as_view()) , name = 'login'),
+    path('login/', views.CustomLoginView.as_view(), name='login'),
     path('' , include('django.contrib.auth.urls')),
     path('profile/' , views.profile , name = 'profile'),
     path('register/' , views.register , name = 'register')

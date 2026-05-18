@@ -74,11 +74,16 @@
                         </div>
 
                         <!-- SUBMIT -->
-                        <div class="d-grid mt-4">
-                            <button type="submit" class="btn btn-danger btn-lg rounded-3">
-                                🚀 Create Post
-                            </button>
+                        <div class="d-flex gap-2 mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg rounded-3">
+                            🚀 Create Post
+                        </button>
+                        <a href="{% url "blog:posts" %}" class="btn btn-danger btn-lg rounded-3">
+                            Cancel
+                        </a>
                         </div>
+
+                        
 
                     </form>
 
