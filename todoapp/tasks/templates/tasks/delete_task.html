@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}Delete Post{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+
+            <div class="card shadow-sm border-0 rounded-4 text-center p-4">
+
+                <div class="card-header bg-danger">
+                <h4 class="mb-1 text-white">Delete Task</h4>
+                    </div>
+
+                    <h1 class="mt-4">❗</h1>
+
+                <p class="text-muted mt-3">
+                    Are you sure you want to delete
+                    <strong>"{{ object.title }}"</strong>?
+                </p>
+
+                <form method="post">
+                    {% csrf_token %}
+
+                    <button type="submit" class="btn btn-danger px-4">
+                        Yes, Delete
+                    </button>
+
+                    <a href="{% url 'tasks:task_detail' task.pk %}"
+                       class="btn btn-secondary px-4 ms-2">
+                        Cancel
+                    </a>
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

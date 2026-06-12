@@ -1,0 +1,59 @@
+<!-- templates/home.html -->
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+
+  <!-- Hero -->
+  <div class="row align-items-center mb-5">
+    <div class="col-md-6">
+      <h1 class="display-5 fw-bold">Stay on top of your tasks</h1>
+      <p class="lead text-muted">Organize, prioritize, and track everything in one place.</p>
+      {% if user.is_authenticated %}
+      <a href="{% url 'tasks:tasks_list' %}" class="btn btn-primary btn-lg">Go to My Tasks</a>
+      {% else %}
+        <a href="{% url 'accounts:register' %}" class="btn btn-primary btn-lg me-2">Get Started</a>
+        <a href="{% url 'accounts:login' %}" class="btn btn-outline-secondary btn-lg">Login</a>
+      {% endif %}
+    </div>
+    <div class="col-md-6 text-center">
+      <img src="{% static 'media/hero.png' %}" alt="Tasks illustration" class="img-fluid" style="max-height:300px;">
+    </div>
+  </div>
+
+  <!-- Features -->
+  <div class="row g-4 text-center">
+    <div class="col-md-4">
+      <div class="card h-100 shadow-sm border-0">
+        <div class="card-body">
+          <div class="fs-1 mb-3">📋</div>
+          <h5 class="card-title">Organize Tasks</h5>
+          <p class="card-text text-muted">Create tasks with priorities, due dates, and categories.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card h-100 shadow-sm border-0">
+        <div class="card-body">
+          <div class="fs-1 mb-3">🔍</div>
+          <h5 class="card-title">Filter & Sort</h5>
+          <p class="card-text text-muted">Quickly find tasks by status, date, or priority.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card h-100 shadow-sm border-0">
+        <div class="card-body">
+          <div class="fs-1 mb-3">✅</div>
+          <h5 class="card-title">Track Progress</h5>
+          <p class="card-text text-muted">Mark tasks complete and stay on schedule.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

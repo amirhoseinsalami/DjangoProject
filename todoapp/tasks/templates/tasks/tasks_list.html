@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% load tz %}
+
+<div class="container mt-5" style="max-width: 540px;">
+
+
+  <!-- Filter Tabs -->
+   <div class="d-flex align-items-center justify-content-between">
+  <ul class="nav mb-3">
+    {% for label, value in tabs %}
+    <li class="nav-item">
+      <a href="?filter={{ value }}"
+         class="nav-link px-3 fw-semibold{% if filter == value %}
+            text-info border-bottom border-2 border-info
+           {% else %}
+             text-secondary
+           {% endif %}">
+        {{ label }}
+      </a>
+    </li>
+    {% endfor %}
+  </ul>
+
+    <form method="get">
+    <input type="hidden" name="filter" value="{{ filter }}">
+    <select name="order" onchange="this.form.submit()">
+        <option value="created_at" {% if order == 'created_at' %}selected{% endif %}>Created Date</option>
+        <option value="due_date" {% if order == 'due_date' %}selected{% endif %}>Due Date</option>
+    </select>
+</form>
+
+  </div>
+  <hr class="mt-0">
+
+  <!-- Task List -->
+  <div class="row d-flex flex-column gap-2 mt-3">
+    {% for task in tasks %}
+    <!-- 
+      We use 'row' inside the loop. 
+      'align-items-center' keeps everything vertically aligned.
+    -->
+    <div class="row align-items-center bg-light rounded px-3 py-3 mx-0">
+      
+      <!-- 1. Task Title (takes up 5 parts) -->
+       {% now "Y-m-d" as current_date %}
+      <div class="col-3">
+        <span class="{% if task.due_date|date:'Y-m-d' < current_date %}text-danger{% endif %} {% if task.status == 'D' %}text-muted text-decoration-line-through{% endif %}">
+          {{ task.title }}
+        </span>
+      </div>
+
+      <!-- 2. The Button Column (takes up 5 parts and is CENTERED) -->
+      <div class="col-7 text-center">
+        <a href="{% url 'tasks:task_detail' task.id %}" 
+           class="badge rounded-pill text-decoration-none text-white px-3 py-2 {% if task.priority == 'L' %}bg-success{% elif task.priority == 'M' %}bg-warning{% else %}bg-danger{% endif %}">
+           Show More Detail
+        </a>
+      </div>
+
+      <!-- 3. The Icons (takes up 2 parts and is pushed to the RIGHT) -->
+      <div class="col-2 d-flex justify-content-end gap-3">
+        <a href="{% url 'tasks:edit_task' task.pk %}" class="text-secondary text-decoration-none">✏</a>
+        <a href="{% url 'tasks:delete_task' task.pk %}" class="text-danger text-decoration-none">🗑</a>
+      </div>
+
+    </div>
+    {% empty %}
+    <p class="text-center text-muted mt-4">No tasks here.</p>
+    {% endfor %}
+</div>
+
+
+  <!-- Add Task Form -->
+  <form method="post" action="{% url 'tasks:add_task' %}" class="d-flex-grow gap-2 mb-4">
+    {% csrf_token %}
+    <div class="d-flex mt-4 justify-content-center">
+        <a href="{% url 'tasks:add_task' %}"
+             class="btn btn-info btn-lg">
+            ✍️ Add New Task
+          </a>
+          </div>
+  </form>
+
+  <!-- Pagination -->
+    <div class="mt-4 d-flex justify-content-center">
+        {% include "tasks/layouts/pagination.html" %}
+    </div>
+
+</div>
+{% endblock %}
+

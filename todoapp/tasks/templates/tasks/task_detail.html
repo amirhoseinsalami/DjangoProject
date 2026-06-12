@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{% load widget_tweaks %}
+{% load task_extras %}
+
+<div class="container mt-4">
+  <div class="card shadow-sm">
+    <div class="card-body text-center">
+        <div>
+        <a href="{% url 'tasks:task_detail' task.id %}" 
+           class="badge rounded-pill text-decoration-none text-white px-3 py-2 {% if task.priority == 'L' %}bg-success{% elif task.priority == 'M' %}bg-warning{% else %}bg-danger{% endif %}">
+           {{ task.get_priority_display }}
+        </a>
+      </div>
+
+
+      <div>
+        <h1 class="fw-bold mb-3">
+            {{ task.title }}
+        </h1>
+      </div>
+
+
+      <div class="row d-flex">
+        <div class="col">
+            Due date : 
+            <p class="{% if task.due_date|date:'Y-m-d' < current_date %}text-danger{% endif %}">
+                {{ task.due_date|date:'Y-m-d' }}
+                {% with days=task.due_date|days_remaining %}
+                {% if days is not None %}
+                    {% if days < 0 %}
+                    <span class="badge bg-danger">Overdue</span>
+                    {% elif days == 0 %}
+                    <span class="badge bg-warning">Due today</span>
+                    {% else %}
+                    <span class="badge bg-info">{{ days }}days left</span>
+                    {% endif %}
+                {% endif %}
+                {% endwith %}
+                
+            </p>
+        </div>
+
+        <div class="col">
+            Status : 
+            <p>{{ task.get_status_display }} {% if task.status == 'D' %}✅ {% elif task.status == "IP" %}⌛ {% else %}⏳ {% endif %}</p>
+        </div>
+      </div>
+
+      <div class="post-body rounded-4 fs-5 lh-lg text-dark bg-secondary-subtle mt-5">
+        {{ task.description|linebreaks }}
+    </div>
+
+    
+        {% if task.categories.count %}
+            <div class="row justify-content-center">
+                {% for category in task.categories.all %}
+                    <span class="col-2 badge rounded-pill bg-info-subtle text-dark px-3 py-2 me-1">
+                        {{ category.name }}
+                    </span>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <div class="rpw d-flex mt-5">
+            <div class="col">
+             <a href="{% url 'tasks:edit_task' task.pk %}" class="badge bg-warning text-decoration-none">✏edit</a>
+            </div>
+
+            <div class="col">
+             <a href="{% url 'tasks:delete_task' task.pk %}" class="badge bg-danger text-decoration-none">🗑delete</a>
+            </div>
+        </div>
+
+        <h3 class="mt-4"><a class="text-decoration-none" href="{% url 'tasks:tasks_list' %}">🔙 Back To Tasks</a></h3>
+                    
+
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,60 @@
+{% load static %}
+
+{% with default_img=request.user.profile.photo %}
+<div class="text-center mb-4 position-relative d-inline-block mx-auto">
+  <img
+    id="avatar-preview"
+    src="{% if default_img %}{{ default_img.url }}{% else %}{% static 'media/profiles/default.png' %}{% endif %}"
+    alt="Profile photo"
+    class="rounded-circle shadow"
+    width="130" height="130"
+    style="object-fit: cover; border: 3px solid #dee2e6;"><label for="{{ form.photo.id_for_label }}"
+         class="position-absolute bottom-0 end-0 bg-primary text-white rounded-circle d-flex align-items-center justify-content-center"
+         style="width:34px; height:34px; cursor:pointer; border: 2px solid white;">
+    <i class="bi bi-camera-fill" style="font-size: 0.85rem;"></i>
+  </label>
+</div>
+
+<div id="file-name" class="text-center text-muted small mb-3" style="min-height: 1.2em;"></div>
+
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}<input type="hidden" name="delete_photo" id="delete_photo_flag" value=""><div class="d-none">{{ form.photo }}</div>
+
+  <button type="submit" class="btn btn-primary w-100 fw-semibold rounded-3 mb-2">
+    <i class="bi bi-upload me-2"></i>Save Photo
+  </button><!-- Show delete button only if user has a custom photo -->
+  {% if default_img %}
+  <button type="button" class="btn btn-outline-danger w-100 rounded-3" id="delete-btn">
+    <i class="bi bi-trash me-2"></i>Delete Photo
+  </button>
+  {% endif %}
+</form>
+{% endwith %}
+
+<script>
+  const DEFAULT_IMG = "{% static 'media/profiles/default.png' %}";
+  const input = document.getElementById('{{ form.photo.id_for_label }}');
+  const preview = document.getElementById('avatar-preview');
+  const fileName = document.getElementById('file-name');
+  const deleteBtn = document.getElementById('delete-btn');
+  const deleteFlag = document.getElementById('delete_photo_flag');
+
+  input.addEventListener('change', function () {
+    const file = this.files[0];
+    if (!file) return;
+    fileName.textContent = file.name;
+    const reader = new FileReader();
+    reader.onload = e => preview.src = e.target.result;
+    reader.readAsDataURL(file);
+  });
+
+  if (deleteBtn) {
+    deleteBtn.addEventListener('click', function () {
+      preview.src = DEFAULT_IMG;
+      fileName.textContent = 'Photo will be deleted on save';
+      deleteFlag.value = '1';
+      input.value = '';
+      deleteBtn.disabled = true;
+    });
+  }
+</script>

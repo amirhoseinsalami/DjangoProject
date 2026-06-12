@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+
+      <div class="card shadow-lg border-0 rounded-4 text-center">
+        <div class="card-body p-5">
+
+          <!-- Avatar -->
+          <div class="mb-4">
+            <div class="d-inline-flex
+                        align-items-center justify-content-center"
+                 style="width:90px;height:90px;font-size:2rem;">
+
+              {% if request.user.profile.photo %}
+                <img src="{{ request.user.profile.photo.url }}" 
+                    alt="Profile photo"
+                    class="img-fluid"
+                    style="width: 180px; border-radius: 10px; object-fit: cover;">
+              {% else %}
+                <img src="{% static 'media/profiles/default.png' %}"
+                    alt="Default photo"
+                    class="img-fluid"
+                    style="width: 180px; border-radius: 10px;">
+              {% endif %}
+            </div>
+          </div>
+
+          <!-- Edit profile link -->
+           <div class="badge bg-primary rounded-pill mb-3">
+            <a class="text-decoration-none text-white" href="{% url 'accounts:change_photo' %}">📸 Change Photo</a>
+           </div>
+
+          
+
+          <!-- Actions -->
+          <div class="d-grid gap-2">
+
+
+            <form method="post" action="{% url 'accounts:profile_edit' %}">
+          {% csrf_token %}
+
+        <!-- Username -->
+          <div class="mb-3">
+            <input type="text"
+                   name="username"
+                   value="{{ request.user.username }}"
+                   id="id_username"
+                   maxlength="150"
+                   class="form-control form-control-lg"
+                   placeholder="Enter new username"
+                   required>
+            </div>
+
+        <!-- Password -->
+            <div class="mb-3">   
+            <input type="password"
+                   name="password"
+                   id="id_password"
+                   maxlength="150"
+                   class="form-control form-control-lg"
+                   placeholder="Enter new password"
+                   required>
+              </div> 
+
+        <!-- Submit -->
+          <div class="d-flex-grow ">
+            <a href="{% url 'accounts:profile' %}" class="btn btn-danger">
+              Cancel
+            </a>
+            <button type="submit" class="btn btn-primary">
+              Save 
+            </button>
+          </div>
+
+              </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}
