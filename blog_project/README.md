@@ -6,7 +6,7 @@ A simple Django blog application with full **CRUD functionality**, **authenticat
 
 ## 📌 Features
 
-- User authentication (login/logout)
+- User authentication (login/logout/register)
 - Create, read, update, delete (CRUD) blog posts
 - Author-only permissions for editing and deleting posts
 - Form validation and error handling
@@ -17,8 +17,8 @@ A simple Django blog application with full **CRUD functionality**, **authenticat
 
 ## 🛠 Tech Stack
 
-- Python 3.10+
-- Django 4.x
+- Python 
+- Django 
 - PostgreSQL
 - Django Test Framework
 
@@ -99,7 +99,7 @@ bash
 
 git clone https://github.com/amirhoseinsalami/DjangoProject
 
-cd django-blog
+cd blog_project
 
 2️⃣ Create a virtual environment
 
@@ -169,12 +169,6 @@ Run a single test method:
 bash
 
 python manage.py test blog.tests.TestCRUD.test_create_post
-
-Run tests with verbose output:
-
-bash
-
-python manage.py test -v 2
 
 🧪 Test Coverage
 
